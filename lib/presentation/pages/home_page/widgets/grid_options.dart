@@ -11,7 +11,7 @@ import 'package:inventario_cea_va/theme/app_theme.dart';
 import 'package:inventario_cea_va/presentation/providers/item_provider.dart';
 
 class GridOptions extends ConsumerWidget {
-  GridOptions({Key? key}) : super(key: key);
+  const GridOptions({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

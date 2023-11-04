@@ -8,6 +8,7 @@ class AppRoutes {
   static const String itemPage = '/itemPage';
   static const String inventarioPage = '/inventarioPage';
   static const String dependenciaPage = '/dependenciaPage';
+  static const String pertenenciaPage = '/pertenenciaPage';
 
   static Map<String, WidgetBuilder> routes(BuildContext context) {
     return {
@@ -16,7 +17,8 @@ class AppRoutes {
       splashPage: (context) => const SplashPage(),
       itemPage: (context) => ItemPage(),
       inventarioPage: (context) => InventarioPage(),
-      dependenciaPage:(context) => DependenciaPage()
+      dependenciaPage: (context) => DependenciaPage(),
+      pertenenciaPage: (context) => const PertenenciaPage('')
     };
   }
 }

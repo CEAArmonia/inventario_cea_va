@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:inventario_cea_va/db/config/server_connection.dart';
 import 'package:inventario_cea_va/db/graphql/mutations.dart';
@@ -23,7 +25,7 @@ class DependenciaHelper {
 
   Future<Dependencia?> addDependencia(String name, String desc) async {
     MutationOptions options = MutationOptions(
-      document: gql(addDependency),
+      document: gql(addDependencyGql),
       variables: {
         "input": {
           "desc": desc,
@@ -33,7 +35,38 @@ class DependenciaHelper {
     );
     var result = await _client.mutate(options);
     var response = result.data!['agregarDependencias'];
-    if(response != null){
+    if (response != null) {
+      return Dependencia.fromJson(response);
+    }
+    return null;
+  }
+
+  Future<bool> editDependencia(String id, String nombre, String desc) async {
+    MutationOptions options = MutationOptions(
+      document: gql(editDependenciaGql),
+      variables: {
+        "editarDependenciaId": id,
+        "input": {
+          "desc": desc,
+          "nombre": nombre,
+        }
+      },
+    );
+    var result = await _client.mutate(options);
+    bool response = result.data!['editarDependencia'];
+    return response;
+  }
+
+  Future<Dependencia?> removeDependency(String id) async {
+    MutationOptions options = MutationOptions(
+      document: gql(removeDependecyGql),
+      variables: {
+        "eliminarDependeciaId": id,
+      },
+    );
+    var result = await _client.mutate(options);
+    var response = result.data!['eliminarDependecia'];
+    if (response != null) {
       return Dependencia.fromJson(response);
     }
     return null;

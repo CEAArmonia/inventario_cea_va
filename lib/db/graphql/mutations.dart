@@ -38,12 +38,24 @@ String addItemGql = r"""mutation AgregarItem($input: ItemInput) {
   }
 }""";
 
-String addMaintenance = r"""mutation AgregarMantenimiento($agregarMantenimientoId: ID, $fecha: Date) {
+String addMaintenanceGql = r"""mutation AgregarMantenimiento($agregarMantenimientoId: ID, $fecha: Date) {
   agregarMantenimiento(id: $agregarMantenimientoId, fecha: $fecha)
 }""";
 
-String addDependency = r"""mutation AgregarDependencias($input: DependenciaInput) {
+String addDependencyGql = r"""mutation AgregarDependencias($input: DependenciaInput) {
   agregarDependencias(input: $input) {
+    id
+    nombre
+    desc
+  }
+}""";
+
+String editDependenciaGql = r"""mutation EditarDependencia($editarDependenciaId: ID, $input: DependenciaInput) {
+  editarDependencia(id: $editarDependenciaId, input: $input)
+}""";
+
+String removeDependecyGql = r"""mutation EliminarDependecia($eliminarDependeciaId: ID) {
+  eliminarDependecia(id: $eliminarDependeciaId) {
     id
     nombre
     desc

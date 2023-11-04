@@ -125,7 +125,7 @@ class ItemHelper {
       }
       for (var date in maintenanceDates) {
         MutationOptions options = MutationOptions(
-          document: gql(addMaintenance),
+          document: gql(addMaintenanceGql),
           variables: {
             "agregarMantenimientoId": idItem,
             "fecha": date.toIso8601String()

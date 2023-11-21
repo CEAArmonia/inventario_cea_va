@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:inventario_cea_va/db/db_helpers/item_helper.dart';
+import 'package:inventario_cea_va/global_data/global_functions.dart';
 import 'package:inventario_cea_va/global_data/global_variables.dart';
-import 'package:inventario_cea_va/models/tipo_item.dart';
-import 'package:inventario_cea_va/models/user.dart';
+import 'package:inventario_cea_va/models/models.dart';
 import 'package:inventario_cea_va/presentation/providers/item_provider.dart';
 import 'package:inventario_cea_va/routes/routes.dart';
 import 'package:inventario_cea_va/theme/app_theme.dart';
@@ -54,7 +54,9 @@ class BottomSheetAddTipoItem extends ConsumerWidget {
                 icon: Icon(Icons.list_sharp),
               ),
               onChanged: (value) {
-                ref.read(tipoItemNombreProvider.notifier).update((state) => value);
+                ref
+                    .read(tipoItemNombreProvider.notifier)
+                    .update((state) => value);
               },
             ),
             ElevatedButton(
@@ -77,14 +79,9 @@ class BottomSheetAddTipoItem extends ConsumerWidget {
                     Navigator.pop(context);
                   }
                 } else {
-                  jwtUsuarioConectado = '';
-                  usuarioLogueado = User(
-                    id: 'id',
-                    nombre: 'nombre',
-                    telefono: 'telefono',
-                    ci: 'ci',
-                  );
-                  Navigator.popAndPushNamed(context, AppRoutes.loginPage);
+                  GlobalFunctions.logoutUser();
+                  Navigator.pushNamedAndRemoveUntil(
+                      context, AppRoutes.loginPage, (route) => false);
                 }
               },
             )

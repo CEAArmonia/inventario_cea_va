@@ -3,11 +3,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:inventario_cea_va/db/db_helpers/dependencia_helper.dart';
+import 'package:inventario_cea_va/db/db_helpers/pertenencia_helper.dart';
+import 'package:inventario_cea_va/global_data/global_functions.dart';
 import 'package:inventario_cea_va/global_data/global_variables.dart';
 import 'package:inventario_cea_va/models/dependencia.dart';
 import 'package:inventario_cea_va/presentation/pages/pages.dart';
 import 'package:inventario_cea_va/presentation/providers/providers.dart';
 import 'package:inventario_cea_va/routes/routes.dart';
+import 'package:inventario_cea_va/theme/app_theme.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:line_icons/line_icons.dart';
 
@@ -35,10 +38,14 @@ class DependenciaPage extends ConsumerWidget {
             children: [
               TextField(
                 controller: _tfDependenciaNombreController,
+                textCapitalization: TextCapitalization.sentences,
                 decoration: InputDecoration(
                   icon: const Icon(LineIcons.search),
                   suffixIcon: IconButton(
-                    icon: const Icon(LineIcons.plusCircle),
+                    icon: const Icon(
+                      LineIcons.plusCircle,
+                      color: AppTheme.shadowColor,
+                    ),
                     onPressed: () {
                       if (!JwtDecoder.isExpired(jwtUsuarioConectado)) {
                         showDialog(
@@ -46,7 +53,7 @@ class DependenciaPage extends ConsumerWidget {
                           builder: (context) => AddDependecia(),
                         );
                       } else {
-                        jwtUsuarioConectado = '';
+                        GlobalFunctions.logoutUser();
                         Navigator.pushNamedAndRemoveUntil(
                             context, AppRoutes.loginPage, (route) => false);
                       }
@@ -81,13 +88,19 @@ class DependenciaPage extends ConsumerWidget {
                         title: Text(dependencia.nombre),
                         subtitle: Text(dependencia.desc),
                         contentPadding: const EdgeInsets.only(left: 4),
-                        leading: const Icon(LineIcons.school),
+                        leading: const Icon(
+                          LineIcons.school,
+                          color: AppTheme.shadowColor,
+                        ),
                         trailing: Row(
                           mainAxisSize: MainAxisSize.min,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             IconButton(
-                              icon: const Icon(LineIcons.trash),
+                              icon: const Icon(
+                                LineIcons.trash,
+                                color: AppTheme.shadowColor,
+                              ),
                               tooltip: 'Eliminar Dependencia',
                               onPressed: () async {
                                 if (!JwtDecoder.isExpired(
@@ -114,14 +127,17 @@ class DependenciaPage extends ConsumerWidget {
                                                 'No se puede eliminar la Dependencia')));
                                   }
                                 } else {
-                                  jwtUsuarioConectado = '';
+                                  GlobalFunctions.logoutUser();
                                   Navigator.pushNamedAndRemoveUntil(context,
                                       AppRoutes.loginPage, (route) => false);
                                 }
                               },
                             ),
                             IconButton(
-                              icon: const Icon(LineIcons.editAlt),
+                              icon: const Icon(
+                                LineIcons.editAlt,
+                                color: AppTheme.shadowColor,
+                              ),
                               tooltip: 'Editar Dependencia',
                               onPressed: () {
                                 if (!JwtDecoder.isExpired(
@@ -132,18 +148,31 @@ class DependenciaPage extends ConsumerWidget {
                                         EditDependecia(dependencia.id),
                                   );
                                 } else {
-                                  jwtUsuarioConectado = '';
+                                  GlobalFunctions.logoutUser();
                                   Navigator.pushNamedAndRemoveUntil(context,
                                       AppRoutes.loginPage, (route) => false);
                                 }
                               },
                             ),
                             IconButton(
-                              icon: const Icon(LineIcons.directions),
+                              icon: const Icon(
+                                LineIcons.directions,
+                                color: AppTheme.shadowColor,
+                              ),
                               tooltip: 'Pertenencias',
-                              onPressed: () {
+                              onPressed: () async {
+                                PertenenciaHelper helper = PertenenciaHelper();
                                 if (!JwtDecoder.isExpired(
                                     jwtUsuarioConectado)) {
+                                  ref
+                                          .read(listaPertenenciasProvider.notifier)
+                                          .state =
+                                      await helper
+                                          .getPertenencias(dependencia.id);
+                                  //TODO: AQuí!!
+                                  ref
+                                      .read(dependenciaProvider.notifier)
+                                      .update((state) => dependencia);
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
@@ -152,7 +181,7 @@ class DependenciaPage extends ConsumerWidget {
                                     ),
                                   );
                                 } else {
-                                  jwtUsuarioConectado = '';
+                                  GlobalFunctions.logoutUser();
                                   Navigator.pushNamedAndRemoveUntil(context,
                                       AppRoutes.loginPage, (route) => false);
                                 }

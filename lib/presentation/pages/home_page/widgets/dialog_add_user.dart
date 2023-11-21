@@ -4,9 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:inventario_cea_va/db/db_helpers/usuario_helper.dart';
-import 'package:inventario_cea_va/global_data/global_functions.dart';
 import 'package:inventario_cea_va/global_data/global_variables.dart';
-import 'package:inventario_cea_va/models/models.dart';
 import 'package:inventario_cea_va/presentation/providers/login_provider.dart';
 import 'package:inventario_cea_va/routes/routes.dart';
 import 'package:inventario_cea_va/theme/app_theme.dart';
@@ -14,8 +12,11 @@ import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:roundcheckbox/roundcheckbox.dart';
 
-class UserConfBottomSheet extends ConsumerWidget {
-  UserConfBottomSheet({Key? key}) : super(key: key);
+import '../../../../global_data/global_functions.dart';
+import '../../../../models/models.dart';
+
+class DialogAddUser extends ConsumerWidget {
+  DialogAddUser({super.key});
 
   final TextEditingController _tfNombre = TextEditingController();
   final TextEditingController _tfPassword = TextEditingController();
@@ -25,37 +26,23 @@ class UserConfBottomSheet extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    Size size = MediaQuery.of(context).size;
-    final obscureText = ref.watch(isObscureText);
-
-    _tfNombre.text = ref.watch(usuarioLogueadoProvider);
-    _tfTelefono.text = ref.watch(usuarioTelefonoProvider);
-    _tfCi.text = ref.watch(usuarioCiProvider);
-    _tfPassword.text = ref.watch(usuarioPasswordProvider);
-
+    final Size size = MediaQuery.of(context).size;
+    bool obscureText = ref.watch(isObscureText);
     return AlertDialog(
       icon: const Icon(
-        LineIcons.userCog,
-        size: 30,
+        LineIcons.userPlus,
+        size: 35,
         color: AppTheme.shadowColor,
       ),
-      title: const Text('Modificar Usuario'),
-      content: Container(
-        height: size.height * .40,
+      title: const Text('Añadir Usuario'),
+      content: SizedBox(
         width: size.width * .7,
-        decoration: const BoxDecoration(
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(25),
-            topRight: Radius.circular(25),
-          ),
-        ),
+        height: size.height * .4,
         child: Padding(
-          padding: const EdgeInsets.symmetric(
-            vertical: 15,
-            horizontal: 35,
-          ),
+          padding: const EdgeInsets.symmetric(horizontal: 25),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               TextField(
                 controller: _tfNombre,
@@ -63,11 +50,14 @@ class UserConfBottomSheet extends ConsumerWidget {
                   hintText: 'Nombre Completo',
                   icon: Icon(LineIcons.user),
                 ),
-                onEditingComplete: () {
-                  ref
-                      .read(usuarioLogueadoProvider.notifier)
-                      .update((state) => _tfNombre.text);
-                },
+              ),
+              TextField(
+                controller: _tfCi,
+                keyboardType: TextInputType.number,
+                decoration: const InputDecoration(
+                  hintText: 'Cédula de Identidad',
+                  icon: Icon(LineIcons.identificationCardAlt),
+                ),
               ),
               TextField(
                 controller: _tfTelefono,
@@ -76,23 +66,6 @@ class UserConfBottomSheet extends ConsumerWidget {
                   hintText: 'Teléfono',
                   icon: Icon(LineIcons.phone),
                 ),
-                onEditingComplete: () {
-                  ref
-                      .read(usuarioTelefonoProvider.notifier)
-                      .update((state) => _tfTelefono.text);
-                },
-              ),
-              TextField(
-                controller: _tfCi,
-                decoration: const InputDecoration(
-                  hintText: 'Cédula de Identidad',
-                  icon: Icon(LineIcons.identificationCardAlt),
-                ),
-                onEditingComplete: () {
-                  ref
-                      .read(usuarioCiProvider.notifier)
-                      .update((state) => _tfCi.text);
-                },
               ),
               TextField(
                 controller: _tfPassword,
@@ -111,13 +84,7 @@ class UserConfBottomSheet extends ConsumerWidget {
                         : const Icon(LineIcons.eyeSlash),
                   ),
                 ),
-                onEditingComplete: () {
-                  ref
-                      .read(usuarioPasswordProvider.notifier)
-                      .update((state) => _tfPassword.text);
-                },
               ),
-              const SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -136,49 +103,49 @@ class UserConfBottomSheet extends ConsumerWidget {
                       Icons.close,
                       color: AppTheme.shadowColor,
                     ),
-
                     checkedColor: AppTheme.primaryColor,
-                    isChecked: ref.watch(usuarioAdministradorProvider),
+                    isChecked: admin,
                     onTap: (p0) {
-                      ref.read(usuarioAdministradorProvider.notifier).state =
-                          p0!;
-                      admin = p0;
+                      admin = p0!;
                     },
                   )
                 ],
-              ),
-              const SizedBox(
-                height: 10,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   TextButton(
-                    child:
-                        const Text('Modificar', style: TextStyle(fontSize: 16)),
+                    child: const Text(
+                      'Añadir',
+                      style: TextStyle(fontSize: 16),
+                    ),
                     onPressed: () async {
                       if (!JwtDecoder.isExpired(jwtUsuarioConectado)) {
-                        UsuarioHelper helper = UsuarioHelper();
-                        String? password;
-                        if (_tfPassword.text.isEmpty) {
-                          password = null;
+                        final UsuarioHelper helper = UsuarioHelper();
+                        if (validarVacios()) {
+                          User? usuarioNuevo = await helper.agregarUsuario(
+                              _tfNombre.text,
+                              _tfTelefono.text,
+                              _tfCi.text,
+                              _tfPassword.text,
+                              admin);
+                          if (usuarioNuevo != null) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content:
+                                    Text('Usuario agregado correctamente.'),
+                              ),
+                            );
+                          }
+                          Navigator.pop(context);
                         } else {
-                          password = _tfPassword.text;
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content:
+                                  Text('Llene los espacios correctamente.'),
+                            ),
+                          );
                         }
-                        User usuarioModificado = await helper.editarUsuario(
-                            _tfNombre.text,
-                            _tfTelefono.text,
-                            _tfCi.text,
-                            password,
-                            admin);
-                        ref.read(usuarioLogueadoProvider.notifier).state =
-                            usuarioModificado.nombre;
-                        ref.read(usuarioTelefonoProvider.notifier).state =
-                            usuarioModificado.telefono;
-                        ref.read(usuarioCiProvider.notifier).state =
-                            usuarioModificado.ci;
-                        ref.invalidate(usuarioPasswordProvider);
-                        Navigator.pop(context);
                       } else {
                         GlobalFunctions.logoutUser();
                         Navigator.pushNamedAndRemoveUntil(
@@ -187,8 +154,10 @@ class UserConfBottomSheet extends ConsumerWidget {
                     },
                   ),
                   TextButton(
-                    child:
-                        const Text('Cancelar', style: TextStyle(fontSize: 16)),
+                    child: const Text(
+                      'Cancelar',
+                      style: TextStyle(fontSize: 16),
+                    ),
                     onPressed: () {
                       Navigator.pop(context);
                     },
@@ -200,5 +169,16 @@ class UserConfBottomSheet extends ConsumerWidget {
         ),
       ),
     );
+  }
+
+  bool validarVacios() {
+    if (_tfNombre.text.isNotEmpty &&
+        _tfPassword.text.isNotEmpty &&
+        _tfTelefono.text.isNotEmpty &&
+        _tfCi.text.isNotEmpty) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }

@@ -1,3 +1,5 @@
+import 'package:inventario_cea_va/models/tipo_item.dart';
+
 class Item {
   String id;
   String nombre;
@@ -9,7 +11,7 @@ class Item {
   int cantidad;
   String? observaciones;
   int tiempoVida;
-  String tipo;
+  TipoItem tipo;
 
   Item({
     required this.id,
@@ -37,7 +39,7 @@ class Item {
       'estado': estado,
       'observaciones': observaciones ?? '',
       'tiempoVida': tiempoVida,
-      'tipo': tipo,
+      'tipo': tipo.toJson(),
     };
   }
 
@@ -54,7 +56,7 @@ class Item {
       observaciones:
           json["obs"] == null ? '' : json["obs"].toString(),
       tiempoVida: json['tiempoVida'],
-      tipo: json['tipo']['id'],
+      tipo: TipoItem.fromJson(json['tipo']),
     );
   }
 }

@@ -5,34 +5,41 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:inventario_cea_va/db/db_helpers/dependencia_helper.dart';
 import 'package:inventario_cea_va/db/db_helpers/item_helper.dart';
+import 'package:inventario_cea_va/presentation/pages/reportes_page/home_page_reportes.dart';
 import 'package:inventario_cea_va/presentation/providers/dependencia_provider.dart';
 import 'package:inventario_cea_va/routes/routes.dart';
 import 'package:inventario_cea_va/theme/app_theme.dart';
 import 'package:inventario_cea_va/presentation/providers/item_provider.dart';
 
 class GridOptions extends ConsumerWidget {
-  const GridOptions({Key? key}) : super(key: key);
+  GridOptions({Key? key}) : super(key: key);
+
+  final TextStyle styles = GoogleFonts.lilitaOne(
+    color: AppTheme.shadowColor,
+    fontSize: 16,
+  );
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final Size size = MediaQuery.of(context).size;
     return GridView.count(
       crossAxisCount: 2,
       children: [
         GestureDetector(
           child: Card(
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 ClipRRect(
                   borderRadius: BorderRadius.circular(5),
                   child: Image.asset(
                     'assets/images/hombre-escribiendo.png',
-                    height: 165,
+                    height: size.height * .18,
                   ),
                 ),
                 Text(
                   'Registrar Items',
-                  style: GoogleFonts.lilitaOne(color: AppTheme.shadowColor),
+                  style: styles,
                 ),
               ],
             ),
@@ -53,18 +60,18 @@ class GridOptions extends ConsumerWidget {
           },
           child: Card(
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 ClipRRect(
                   borderRadius: BorderRadius.circular(5),
                   child: Image.asset(
                     'assets/images/hombre-cajas.png',
-                    height: 165,
+                    height: size.height * .18,
                   ),
                 ),
                 Text(
                   'Inventario',
-                  style: GoogleFonts.lilitaOne(color: AppTheme.shadowColor),
+                  style: styles,
                 ),
               ],
             ),
@@ -79,22 +86,50 @@ class GridOptions extends ConsumerWidget {
           },
           child: Card(
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 ClipRRect(
                   borderRadius: BorderRadius.circular(5),
                   child: Image.asset(
                     'assets/images/classroom.png',
-                    height: 165,
+                    height: size.height * .18,
                   ),
                 ),
                 Text(
                   'Dependencia',
-                  style: GoogleFonts.lilitaOne(color: AppTheme.shadowColor),
+                  style: styles,
                 ),
               ],
             ),
           ),
+        ),
+        GestureDetector(
+          child: Card(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(5),
+                  child: Image.asset(
+                    'assets/images/mujer-asignando.png',
+                    height: size.height * .18,
+                  ),
+                ),
+                Text(
+                  'Reportes',
+                  style: styles,
+                ),
+              ],
+            ),
+          ),
+          onTap: () async {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const HomePageReportes(),
+              ),
+            );
+          },
         )
       ],
     );

@@ -1,24 +1,25 @@
+import 'package:inventario_cea_va/models/user.dart';
 
 class Bitacora {
   String id;
   DateTime fecha;
-  String usuarioId;
+  User? usuario;
 
-  Bitacora({required this.id, required this.fecha, required this.usuarioId});
+  Bitacora({required this.id, required this.fecha, required this.usuario});
 
   Map<String, dynamic> toJson() {
     return {
       'id': id,
       'fecha': fecha.toIso8601String(),
-      'usuario_id': usuarioId
+      'usuario': usuario!.toJson(),
     };
   }
 
   factory Bitacora.fromJson(Map<String, dynamic> json) {
     return Bitacora(
       id: json['id'],
-      fecha: json['fecha'],
-      usuarioId: json['usuarioId'],
+      fecha: DateTime.parse(json['fecha']),
+      usuario: json['usuario'] != null ? User.fromJson(json['usuario']) : null,
     );
   }
 }

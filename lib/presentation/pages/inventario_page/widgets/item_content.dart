@@ -1,18 +1,26 @@
-// ignore_for_file: must_be_immutable
+// ignore_for_file: must_be_immutable, use_build_context_synchronously
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:inventario_cea_va/db/db_helpers/responsable_helper.dart';
 import 'package:inventario_cea_va/global_data/global_functions.dart';
-import 'package:inventario_cea_va/models/item.dart';
+import 'package:inventario_cea_va/global_data/global_variables.dart';
+import 'package:inventario_cea_va/models/models.dart';
+import 'package:inventario_cea_va/presentation/pages/inventario_page/widgets/bottom_sheet_add_items.dart';
+import 'package:inventario_cea_va/presentation/pages/inventario_page/widgets/dialog_responsable.dart';
 import 'package:inventario_cea_va/presentation/pages/inventario_page/widgets/expanded_theme.dart';
+import 'package:inventario_cea_va/presentation/providers/providers.dart';
+import 'package:inventario_cea_va/routes/routes.dart';
 import 'package:inventario_cea_va/theme/app_theme.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:line_icons/line_icons.dart';
 
-class ItemContent extends StatelessWidget {
+class ItemContent extends ConsumerWidget {
   Item item;
   ItemContent(this.item, {Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     Size size = MediaQuery.of(context).size;
     return Container(
       height: size.height * .25,
@@ -66,96 +74,64 @@ class ItemContent extends StatelessWidget {
             children: [
               GestureDetector(
                 child: SizedBox(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      const Icon(
-                        LineIcons.qrcode,
-                        size: 30,
-                        color: AppTheme.brightColor,
-                      ),
-                      Text(
-                        'Generar Código',
-                        textAlign: TextAlign.center,
-                        style: expandedTextStyle,
-                      )
-                    ],
+                  child: Card(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        const Icon(
+                          LineIcons.shoppingCartArrowDown,
+                          size: 30,
+                          color: AppTheme.brightColor,
+                        ),
+                        Text(
+                          'Añadir Item',
+                          textAlign: TextAlign.center,
+                          style: expandedTextStyle,
+                        )
+                      ],
+                    ),
                   ),
                 ),
                 onTap: () {
-                  //TODO: Código para generar código QR
+                  showModalBottomSheet(
+                    context: context,
+                    builder: (context) => BottomSheetAddItems(item.id),
+                  );
                 },
               ),
               GestureDetector(
                 child: SizedBox(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      const Icon(
-                        LineIcons.shoppingCartArrowDown,
-                        size: 30,
-                        color: AppTheme.brightColor,
-                      ),
-                      Text(
-                        'Añadir Item',
-                        textAlign: TextAlign.center,
-                        style: expandedTextStyle,
-                      )
-                    ],
+                  child: Card(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        const Icon(
+                          LineIcons.shoppingBag,
+                          size: 30,
+                          color: AppTheme.brightColor,
+                        ),
+                        Text(
+                          'Asignación',
+                          textAlign: TextAlign.center,
+                          style: expandedTextStyle,
+                        )
+                      ],
+                    ),
                   ),
                 ),
-                onTap: () {
-                  //TODO: Código para generar añadir Items
+                onTap: () async {
+                  ResponsableHelper helper = ResponsableHelper();
+                  if (!JwtDecoder.isExpired(jwtUsuarioConectado)) {
+                    ref.read(listaResponsableProvider.notifier).state = await helper.getResponsables();
+                    showDialog(context: context, builder: (context) => DialogResponsable(item),);
+                  } else {
+                    GlobalFunctions.logoutUser();
+                    Navigator.popAndPushNamed(context, AppRoutes.loginPage);
+                  }
                 },
               ),
-              GestureDetector(
-                child: SizedBox(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      const Icon(
-                        LineIcons.shoppingBag,
-                        size: 30,
-                        color: AppTheme.brightColor,
-                      ),
-                      Text(
-                        'Responsable',
-                        textAlign: TextAlign.center,
-                        style: expandedTextStyle,
-                      )
-                    ],
-                  ),
-                ),
-                onTap: () {
-                  //TODO: Código para generar código QR
-                },
-              ),
-              GestureDetector(
-                child: SizedBox(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      const Icon(
-                        LineIcons.alternateExchange,
-                        size: 30,
-                        color: AppTheme.brightColor,
-                      ),
-                      Text(
-                        'Dependencia',
-                        textAlign: TextAlign.center,
-                        style: expandedTextStyle,
-                      )
-                    ],
-                  ),
-                ),
-                onTap: () {
-                  //TODO: Código para generar código QR
-                },
-              )
             ],
           ),
         )

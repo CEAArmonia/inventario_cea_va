@@ -1,11 +1,17 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:inventario_cea_va/models/user.dart';
+import 'package:inventario_cea_va/db/db_helpers/usuario_helper.dart';
+import 'package:inventario_cea_va/global_data/global_functions.dart';
+import 'package:inventario_cea_va/global_data/global_variables.dart';
+import 'package:inventario_cea_va/presentation/pages/home_page/widgets/dialog_add_user.dart';
 import 'package:inventario_cea_va/presentation/pages/home_page/widgets/grid_options.dart';
+import 'package:inventario_cea_va/presentation/pages/home_page/widgets/home_bottom_sheet.dart';
 import 'package:inventario_cea_va/presentation/pages/home_page/widgets/user_conf_bottomsheet.dart';
 import 'package:inventario_cea_va/presentation/providers/login_provider.dart';
+import 'package:inventario_cea_va/presentation/providers/user_provider.dart';
 import 'package:inventario_cea_va/routes/routes.dart';
-import 'package:inventario_cea_va/global_data/global_variables.dart';
 import 'package:line_icons/line_icons.dart';
 
 class HomePage extends ConsumerWidget {
@@ -13,7 +19,6 @@ class HomePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-
     final usuario = ref.watch(usuarioLogueadoProvider);
     final Size size = MediaQuery.of(context).size;
 
@@ -56,32 +61,76 @@ class HomePage extends ConsumerWidget {
                     IconButton(
                       icon: const Icon(LineIcons.userCog),
                       onPressed: () {
-                        showModalBottomSheet(
-                          context: context,
-                          builder: (context) => SingleChildScrollView(
-                            child: UserConfBottomSheet(),
-                          ),
-                        );
+                        if (usuarioLogueado!.administrador) {
+                          showDialog(
+                            context: context,
+                            builder: (context) => UserConfBottomSheet(),
+                          );
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text(
+                                  'No tiene permisos para realizar esa tarea'),
+                            ),
+                          );
+                        }
+                      },
+                    ),
+                    IconButton(
+                      icon: const Icon(LineIcons.userPlus),
+                      onPressed: () {
+                        if (usuarioLogueado!.administrador) {
+                          showDialog(
+                            context: context,
+                            builder: (context) => DialogAddUser(),
+                          );
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text(
+                                  'No tiene permisos para realizar esa tarea'),
+                            ),
+                          );
+                        }
+                      },
+                    ),
+                    IconButton(
+                      icon: const Icon(
+                        Icons.verified_user,
+                      ),
+                      onPressed: () async {
+                        UsuarioHelper helper = UsuarioHelper();
+                        ref.read(listaUsersProvider.notifier).state = await helper.getUsers();
+                        if (usuarioLogueado!.administrador) {
+                          showModalBottomSheet(
+                            context: context,
+                            builder: (context) => const HomeBottomSheet(),
+                          );
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text(
+                                  'No tiene permisos para realizar esa tarea'),
+                            ),
+                          );
+                        }
                       },
                     ),
                     IconButton(
                       icon: const Icon(LineIcons.alternateSignOut),
                       onPressed: () {
-                        jwtUsuarioConectado = '';
-                        usuarioLogueado = User(
-                          id: 'id',
-                          nombre: 'nombre',
-                          telefono: 'telefono',
-                          ci: 'ci',
-                        );
-                        Navigator.popAndPushNamed(context, AppRoutes.loginPage);
+                        GlobalFunctions.logoutUser();
+                        Navigator.pushNamedAndRemoveUntil(
+                            context, AppRoutes.loginPage, (route) => false);
                       },
                     )
                   ],
                 ),
               ),
               SizedBox(
-                height: size.height * .45,
+                height: size.height * .015,
+              ),
+              Expanded(
                 child: GridOptions(),
               )
             ],

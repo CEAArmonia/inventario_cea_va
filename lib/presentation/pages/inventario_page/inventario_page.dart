@@ -71,7 +71,6 @@ class InventarioPage extends ConsumerWidget {
                 },
               ),
             ),
-            const Text('Texto Visible')
           ],
         ),
       ),

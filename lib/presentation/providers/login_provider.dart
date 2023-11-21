@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:inventario_cea_va/models/models.dart';
 
 final usuarioLogueadoProvider = StateProvider<String>(
   (ref) {
@@ -25,11 +26,15 @@ final usuarioPasswordProvider = StateProvider<String>(
   },
 );
 
+final usuarioAdministradorProvider = StateProvider<bool>((ref) => false);
+
 final isObscureText = StateProvider.autoDispose<bool>((ref) {
   return true;
 });
 
 final mensajeNoLogueo = StateProvider.autoDispose<String>((ref) => '');
 
-final tfNombreControllerProvider = Provider((ref) => TextEditingController());
+final tfNombreControllerProvider = StateProvider((ref) => TextEditingController());
+
+final listaBitacoraProvider = StateProvider<List<Bitacora>>((ref) => []);
 

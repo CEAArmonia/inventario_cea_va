@@ -6,8 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:inventario_cea_va/db/db_helpers/item_helper.dart';
 import 'package:inventario_cea_va/global_data/global_functions.dart';
 import 'package:inventario_cea_va/global_data/global_variables.dart';
-import 'package:inventario_cea_va/models/item.dart';
-import 'package:inventario_cea_va/models/user.dart';
+import 'package:inventario_cea_va/models/models.dart';
 import 'package:inventario_cea_va/presentation/pages/pages.dart';
 import 'package:inventario_cea_va/presentation/providers/providers.dart';
 import 'package:inventario_cea_va/routes/routes.dart';
@@ -436,14 +435,9 @@ class ItemPage extends ConsumerWidget {
                     );
                     Navigator.pop(context);
                   } else {
-                    jwtUsuarioConectado = '';
-                    usuarioLogueado = User(
-                      id: 'id',
-                      nombre: 'nombre',
-                      telefono: 'telefono',
-                      ci: 'ci',
-                    );
-                    Navigator.popAndPushNamed(context, AppRoutes.loginPage);
+                    GlobalFunctions.logoutUser();
+                        Navigator.pushNamedAndRemoveUntil(
+                            context, AppRoutes.loginPage, (route) => false);
                   }
                 } else {
                   conditions = 0;

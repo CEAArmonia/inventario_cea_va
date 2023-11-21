@@ -1,9 +1,14 @@
+import 'package:inventario_cea_va/models/models.dart';
+
 class User {
   String id;
   String nombre;
   String telefono;
   String ci;
   String? password;
+  bool administrador;
+  bool? activo;
+  List<Bitacora>? bitacoras;
 
   User({
     required this.id,
@@ -11,6 +16,9 @@ class User {
     required this.telefono,
     required this.ci,
     this.password,
+    required this.administrador,
+    this.activo,
+    this.bitacoras
   });
 
   Map<String, dynamic> toJson() {
@@ -19,6 +27,9 @@ class User {
       'nombre': nombre,
       'telefono': telefono,
       'ci': ci,
+      'administrador': administrador,
+      'activo': activo,
+      'bitacoras': bitacoras!.map((e) => e.toJson()).toList(),
     };
   }
 
@@ -28,6 +39,10 @@ class User {
       nombre: json['nombre'],
       telefono: json['telefono'],
       ci: json['ci'],
+      administrador: json['administrador'],
+      activo: json['activo'],
+      bitacoras: json['bitacoras'] != null ? List<Bitacora>.from(json["bitacoras"].map((x) => Bitacora.
+      fromJson(x))) : [],
     );
   }
 }

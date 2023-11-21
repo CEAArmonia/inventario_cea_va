@@ -61,3 +61,112 @@ String removeDependecyGql = r"""mutation EliminarDependecia($eliminarDependeciaI
     desc
   }
 }""";
+
+String addPertenenciaGql = r"""mutation AsignarPertenencia($itemId: ID, $dependenciaId: ID, $cantidad: Int) {
+  asignarPertenencia(itemId: $itemId, dependenciaId: $dependenciaId, cantidad: $cantidad) {
+    id
+    cantidad
+    fecha
+    fecha_retorno
+    retornado
+    item {
+      id
+      codigo
+      nombre
+      desc
+      cantidad
+      fechaCompra
+      valor
+      ubicacion
+      estado
+      obs
+      tiempoVida
+      mantenimientos
+      tipo {
+        id
+        nombre
+      }
+    }
+  }
+}""";
+
+String returnPertenenciaGql = r"""mutation RetornoPertenencia($pertenenciaId: ID) {
+  retornoPertenencia(pertenenciaId: $pertenenciaId) {
+    id
+    cantidad
+    fecha
+    fecha_retorno
+    retornado
+    item {
+      id
+      codigo
+      nombre
+      desc
+      cantidad
+      fechaCompra
+      valor
+      ubicacion
+      estado
+      obs
+      tiempoVida
+      mantenimientos
+      tipo {
+        id
+        nombre
+      }
+    }
+    dependencia {
+      id
+      nombre
+      desc
+    }
+  }
+}""";
+
+String agregarCantidadesItemGql = r"""mutation AgregarCantidadesItem($itemId: ID, $cantidad: Int) {
+  agregarCantidadesItem(itemId: $itemId, cantidad: $cantidad) {
+    id
+    codigo
+    nombre
+    desc
+    cantidad
+    fechaCompra
+    valor
+    ubicacion
+    estado
+    obs
+    tiempoVida
+    mantenimientos
+    tipo {
+      id
+      nombre
+    }
+  }
+}""";
+
+String asignarItemResponsableGql = r"""mutation AsignarItemResponsable($input: AsignarItemResponsableInput) {
+  asignarItemResponsable(input: $input)
+}""";
+
+String editarUsuarioGql = r"""mutation EditarUsuario($input: RegistroUsuarioInput) {
+  editarUsuario(input: $input) {
+    id
+    nombre
+    telefono
+    ci
+    administrador
+    activo
+  }
+}""";
+
+String agregarUsuarioGql = r"""mutation AgregarUsuario($input: RegistroUsuarioInput) {
+  agregarUsuario(input: $input) {
+    id
+    nombre
+    telefono
+    ci
+    password
+    administrador
+    activo
+  }
+}""";

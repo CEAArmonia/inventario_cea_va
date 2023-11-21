@@ -10,7 +10,9 @@ class ItemHelper {
 
   Future<List<Item>> getItems() async {
     List<Item> listaItems = [];
-    QueryOptions options = QueryOptions(document: gql(getItemsGql));
+    QueryOptions options = QueryOptions(
+      document: gql(getItemsGql),
+    );
 
     var result = await _client.query(options);
     var items = result.data!['obtenerItems'];
@@ -33,6 +35,16 @@ class ItemHelper {
       listaItems.add(Item.fromJson(item));
     }
     return listaItems;
+  }
+
+  Future<Item> getItemById(String id) async {
+    QueryOptions options = QueryOptions(
+      document: gql(getItemByIdGql),
+      variables: {"obtenerItemPorIdId": id},
+    );
+
+    var result = await _client.query(options);
+    return Item.fromJson(result.data!['obtenerItemPorId']);
   }
 
   Future<List<TipoItem>> getTiposItem() async {
@@ -74,6 +86,19 @@ class ItemHelper {
     var result = await _client.mutate(options);
     var tipoItem = result.data!['eliminarTipoItem'];
     return TipoItem.fromJson(tipoItem);
+  }
+
+  Future<Item> addItemNumber(String id, int cantidad) async {
+    MutationOptions options = MutationOptions(
+      document: gql(agregarCantidadesItemGql),
+      variables: {
+        "itemId": id,
+        "cantidad": cantidad,
+      },
+    );
+
+    var response = await _client.mutate(options);
+    return Item.fromJson(response.data!['agregarCantidadesItem']);
   }
 
   Future<Item> addItem(
@@ -134,5 +159,16 @@ class ItemHelper {
         await _client.mutate(options);
       }
     }
+  }
+
+  Future<List<Item>> getItemsCantidadesBajas() async {
+    QueryOptions options = QueryOptions(document: gql(getCantidadesBajasGql));
+    var result = await _client.query(options);
+    var response = result.data!['obtenerItemsCantidad'];
+    List<Item> items = [];
+    for (var item in response) {
+      items.add(Item.fromJson(item));
+    }
+    return items;
   }
 }

@@ -2,9 +2,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:inventario_cea_va/global_data/global_functions.dart';
 import 'package:inventario_cea_va/global_data/global_variables.dart';
-import 'package:inventario_cea_va/models/tipo_item.dart';
-import 'package:inventario_cea_va/models/user.dart';
+import 'package:inventario_cea_va/models/models.dart';
 import 'package:inventario_cea_va/presentation/providers/providers.dart';
 import 'package:inventario_cea_va/db/db_helpers/item_helper.dart';
 import 'package:inventario_cea_va/routes/routes.dart';
@@ -38,13 +38,7 @@ class AlertDialogItem extends ConsumerWidget {
               ref.read(tiposItemProvider.notifier).state = lista;
               Navigator.pop(context);
             } else {
-              jwtUsuarioConectado = '';
-              usuarioLogueado = User(
-                id: 'id',
-                nombre: 'nombre',
-                telefono: 'telefono',
-                ci: 'ci',
-              );
+              GlobalFunctions.logoutUser();
               Navigator.popAndPushNamed(context, AppRoutes.loginPage);
             }
           },

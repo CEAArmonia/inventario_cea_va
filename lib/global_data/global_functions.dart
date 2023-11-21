@@ -1,4 +1,7 @@
 import 'package:date_format/date_format.dart';
+import 'package:inventario_cea_va/models/models.dart';
+
+import 'global_variables.dart';
 
 class GlobalFunctions {
   static DateTime stringToDate(String date) {
@@ -13,5 +16,17 @@ class GlobalFunctions {
   static String dateToString(DateTime date) {
     String newDate = formatDate(date, ['dd', '-', 'mm', '-', 'yyyy']);
     return newDate;
+  }
+
+  static logoutUser() {
+    jwtUsuarioConectado = '';
+    usuarioLogueado = User(
+      id: 'id',
+      nombre: 'nombre',
+      telefono: 'telefono',
+      ci: 'ci',
+      activo: false,
+      administrador: false,
+    );
   }
 }

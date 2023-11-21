@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:inventario_cea_va/db/config/server_connection.dart';
 import 'package:inventario_cea_va/db/graphql/mutations.dart';
@@ -70,5 +68,14 @@ class DependenciaHelper {
       return Dependencia.fromJson(response);
     }
     return null;
+  }
+
+  Future<Dependencia> getDependenciaPorId(String id) async {
+    QueryOptions options = QueryOptions(
+      document: gql(getDependenciaPorIdGql),
+      variables: {"obtenerDependenciaPorIdId": id},
+    );
+    var result = await _client.query(options);
+    return Dependencia.fromJson(result.data!['obtenerDependenciaPorId']);
   }
 }

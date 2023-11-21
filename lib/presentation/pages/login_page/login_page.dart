@@ -133,11 +133,13 @@ class LoginPage extends ConsumerWidget {
                       );
                       if (await login.loginUsuario(ci, password)) {
                         ref.read(usuarioLogueadoProvider.notifier).state =
-                            usuarioLogueado.nombre;
+                            usuarioLogueado!.nombre;
                         ref.read(usuarioTelefonoProvider.notifier).state =
-                            usuarioLogueado.telefono;
+                            usuarioLogueado!.telefono;
                         ref.read(usuarioCiProvider.notifier).state =
-                            usuarioLogueado.ci;
+                            usuarioLogueado!.ci;
+                        ref.read(usuarioAdministradorProvider.notifier).state =
+                            usuarioLogueado!.administrador;
                         navegarHome(context);
                       } else {
                         ref.read(mensajeNoLogueo.notifier).state =

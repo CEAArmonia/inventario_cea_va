@@ -12,80 +12,70 @@ class AppTheme {
 
   static ThemeData appThemeInventory(BuildContext context) =>
       ThemeData.light().copyWith(
-          primaryColor: primaryColor,
-          scaffoldBackgroundColor: secondaryColor,
-          cardColor: brightColor,
-          useMaterial3: true,
-          iconButtonTheme: const IconButtonThemeData(
-            style: ButtonStyle(
-              iconColor: MaterialStatePropertyAll(brightColor),
-              iconSize: MaterialStatePropertyAll(25),
-            ),
+        primaryColor: primaryColor,
+        scaffoldBackgroundColor: secondaryColor,
+        cardColor: brightColor,
+        useMaterial3: true,
+        listTileTheme: ListTileThemeData(
+          titleTextStyle: GoogleFonts.lato(
+            fontSize: 15,
+            color: shadowColor,
+            fontWeight: FontWeight.w600,
           ),
-          primaryTextTheme:
-              GoogleFonts.latoTextTheme(Theme.of(context).textTheme).copyWith(
-            bodyLarge: const TextStyle(
-              fontSize: 16,
-              color: shadowColor,
-            ),
+          subtitleTextStyle: GoogleFonts.lato(
+            fontSize: 12,
+            color: shadowColor,
+            fontWeight: FontWeight.normal,
           ),
-          dialogTheme: DialogTheme(
-              backgroundColor: secondaryColor,
-              titleTextStyle:
-                  GoogleFonts.lilitaOne(color: shadowColor, fontSize: 25),
-              contentTextStyle: GoogleFonts.lato(
-                  color: shadowColor,
-                  fontSize: 15,
-                  fontWeight: FontWeight.w500)),
-          textButtonTheme: TextButtonThemeData(
-            style: ButtonStyle(
-              foregroundColor: const MaterialStatePropertyAll(
-                shadowColor,
-              ),
-              textStyle: MaterialStatePropertyAll(
-                GoogleFonts.lato(
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-            ),
+          iconColor: shadowColor,
+        ),
+        progressIndicatorTheme: const ProgressIndicatorThemeData(
+          color: brightColor,
+        ),
+        floatingActionButtonTheme: const FloatingActionButtonThemeData(
+          backgroundColor: primaryColor,
+          foregroundColor: secondaryColor,
+          elevation: 3,
+        ),
+        iconButtonTheme: const IconButtonThemeData(
+          style: ButtonStyle(
+            iconColor: MaterialStatePropertyAll(brightColor),
+            iconSize: MaterialStatePropertyAll(25),
           ),
-          dropdownMenuTheme: DropdownMenuThemeData(
-            textStyle: GoogleFonts.lato(
-              color: shadowColor,
+        ),
+        primaryTextTheme:
+            GoogleFonts.latoTextTheme(Theme.of(context).textTheme).copyWith(
+          bodyLarge: const TextStyle(
+            fontSize: 16,
+            color: shadowColor,
+          ),
+        ),
+        dialogTheme: DialogTheme(
+            backgroundColor: secondaryColor,
+            elevation: 5,
+            shadowColor: shadowColor,
+            shape: RoundedRectangleBorder(borderRadius: borderRadius),
+            titleTextStyle:
+                GoogleFonts.lilitaOne(color: shadowColor, fontSize: 25),
+            contentTextStyle: GoogleFonts.lato(
+                color: shadowColor, fontSize: 15, fontWeight: FontWeight.w500)),
+        textButtonTheme: TextButtonThemeData(
+          style: ButtonStyle(
+            foregroundColor: const MaterialStatePropertyAll(
+              shadowColor,
             ),
-            inputDecorationTheme: InputDecorationTheme(
-              labelStyle: GoogleFonts.lato(
-                color: shadowColor,
+            textStyle: MaterialStatePropertyAll(
+              GoogleFonts.lato(
                 fontWeight: FontWeight.w700,
               ),
-              hintStyle: GoogleFonts.lato(
-                color: shadowColor,
-                fontSize: 16,
-                fontWeight: FontWeight.w800,
-              ),
-              enabledBorder: const UnderlineInputBorder(
-                borderSide: BorderSide(
-                  color: shadowColor,
-                  width: 2,
-                ),
-              ),
-              focusedBorder: const UnderlineInputBorder(
-                borderSide: BorderSide(
-                  color: primaryColor,
-                  width: 2,
-                ),
-              ),
-            ),
-            menuStyle: const MenuStyle(
-              backgroundColor: MaterialStatePropertyAll(AppTheme.brightColor),
-              elevation: MaterialStatePropertyAll(3),
-              shadowColor: MaterialStatePropertyAll(AppTheme.shadowColor),
             ),
           ),
+        ),
+        dropdownMenuTheme: DropdownMenuThemeData(
+          textStyle: GoogleFonts.lato(
+            color: shadowColor,
+          ),
           inputDecorationTheme: InputDecorationTheme(
-            iconColor: shadowColor,
-            floatingLabelStyle: GoogleFonts.lato(
-                color: brightColor, fontWeight: FontWeight.bold),
             labelStyle: GoogleFonts.lato(
               color: shadowColor,
               fontWeight: FontWeight.w700,
@@ -103,82 +93,123 @@ class AppTheme {
             ),
             focusedBorder: const UnderlineInputBorder(
               borderSide: BorderSide(
-                color: brightColor,
+                color: primaryColor,
                 width: 2,
               ),
             ),
           ),
-          appBarTheme: AppBarTheme(
-            
-            foregroundColor: Colors.white,
-            iconTheme: const IconThemeData(
+          menuStyle: const MenuStyle(
+            backgroundColor: MaterialStatePropertyAll(AppTheme.brightColor),
+            elevation: MaterialStatePropertyAll(3),
+            shadowColor: MaterialStatePropertyAll(AppTheme.shadowColor),
+          ),
+        ),
+        inputDecorationTheme: InputDecorationTheme(
+          iconColor: shadowColor,
+          floatingLabelStyle:
+              GoogleFonts.lato(color: brightColor, fontWeight: FontWeight.bold),
+          labelStyle: GoogleFonts.lato(
+            color: shadowColor,
+            fontWeight: FontWeight.w700,
+          ),
+          hintStyle: GoogleFonts.lato(
+            color: shadowColor,
+            fontSize: 16,
+            fontWeight: FontWeight.w800,
+          ),
+          enabledBorder: const UnderlineInputBorder(
+            borderSide: BorderSide(
+              color: shadowColor,
+              width: 2,
+            ),
+          ),
+          focusedBorder: const UnderlineInputBorder(
+            borderSide: BorderSide(
               color: brightColor,
-              shadows: [
-                Shadow(
-                  color: shadowColor,
-                  offset: Offset(1, 2),
-                  blurRadius: 5,
-                )
-              ],
+              width: 2,
             ),
-            centerTitle: true,
-            titleTextStyle: GoogleFonts.lilitaOne(
-              shadows: [
-                const Shadow(
-                  color: shadowColor,
-                  offset: Offset(1, 2),
-                  blurRadius: 2.5,
-                )
-              ],
-              fontSize: 22,
-            ),
-            color: primaryColor,
-            elevation: 3.0,
-            shadowColor: shadowColor,
           ),
-          datePickerTheme: DatePickerThemeData(
-            backgroundColor: secondaryColor,
-            surfaceTintColor: secondaryColor,
-            elevation: 5.0,
-            shadowColor: shadowColor,
-            headerBackgroundColor: primaryColor,
-            headerForegroundColor: secondaryColor,
-            headerHeadlineStyle: GoogleFonts.lilitaOne(fontSize: 40),
-            headerHelpStyle: GoogleFonts.lilitaOne(fontSize: 15),
-            dayStyle: GoogleFonts.lato(fontWeight: FontWeight.w500),
-            weekdayStyle: GoogleFonts.lato(fontWeight: FontWeight.w700),
-            yearStyle: GoogleFonts.lato(fontWeight: FontWeight.w400),
-            todayBackgroundColor: const MaterialStatePropertyAll(primaryColor),
-            todayForegroundColor: const MaterialStatePropertyAll(brightColor),
-            dayOverlayColor: const MaterialStatePropertyAll(primaryColor),
-            rangePickerBackgroundColor: primaryColor,
-            dividerColor: brightColor,
+        ),
+        appBarTheme: AppBarTheme(
+          foregroundColor: Colors.white,
+          iconTheme: const IconThemeData(
+            color: brightColor,
+            shadows: [
+              Shadow(
+                color: shadowColor,
+                offset: Offset(1, 2),
+                blurRadius: 5,
+              )
+            ],
           ),
-          snackBarTheme: SnackBarThemeData(
-            backgroundColor: shadowColor,
-            contentTextStyle: GoogleFonts.lato(color: brightColor),
-            elevation: 3,
+          centerTitle: true,
+          titleTextStyle: GoogleFonts.lilitaOne(
+            shadows: [
+              const Shadow(
+                color: shadowColor,
+                offset: Offset(1, 2),
+                blurRadius: 2.5,
+              )
+            ],
+            fontSize: 22,
           ),
-          elevatedButtonTheme: ElevatedButtonThemeData(
-            style: ButtonStyle(
-              backgroundColor: const MaterialStatePropertyAll(primaryColor),
-              shadowColor: const MaterialStatePropertyAll(shadowColor),
-              foregroundColor: const MaterialStatePropertyAll(secondaryColor),
-              iconColor: const MaterialStatePropertyAll(brightColor),
-              elevation: const MaterialStatePropertyAll(5.5),
-              shape: MaterialStatePropertyAll(
-                RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  side: const BorderSide(color: brightColor),
-                ),
+          color: primaryColor,
+          elevation: 3.0,
+          shadowColor: shadowColor,
+        ),
+        datePickerTheme: DatePickerThemeData(
+          backgroundColor: secondaryColor,
+          surfaceTintColor: secondaryColor,
+          elevation: 5.0,
+          shadowColor: shadowColor,
+          headerBackgroundColor: primaryColor,
+          headerForegroundColor: secondaryColor,
+          headerHeadlineStyle: GoogleFonts.lilitaOne(fontSize: 40),
+          headerHelpStyle: GoogleFonts.lilitaOne(fontSize: 15),
+          dayStyle: GoogleFonts.lato(fontWeight: FontWeight.w500),
+          weekdayStyle: GoogleFonts.lato(fontWeight: FontWeight.w700),
+          yearStyle: GoogleFonts.lato(fontWeight: FontWeight.w400),
+          todayBackgroundColor: const MaterialStatePropertyAll(primaryColor),
+          todayForegroundColor: const MaterialStatePropertyAll(brightColor),
+          dayOverlayColor: const MaterialStatePropertyAll(primaryColor),
+          rangePickerBackgroundColor: primaryColor,
+          dividerColor: brightColor,
+        ),
+        snackBarTheme: SnackBarThemeData(
+          backgroundColor: shadowColor,
+          contentTextStyle: GoogleFonts.lato(color: brightColor),
+          elevation: 3,
+        ),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ButtonStyle(
+            backgroundColor: const MaterialStatePropertyAll(primaryColor),
+            shadowColor: const MaterialStatePropertyAll(shadowColor),
+            foregroundColor: const MaterialStatePropertyAll(secondaryColor),
+            iconColor: const MaterialStatePropertyAll(brightColor),
+            elevation: const MaterialStatePropertyAll(5.5),
+            shape: MaterialStatePropertyAll(
+              RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+                side: const BorderSide(color: brightColor),
               ),
-              textStyle: MaterialStatePropertyAll(
-                GoogleFonts.lilitaOne(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w100,
-                ),
+            ),
+            textStyle: MaterialStatePropertyAll(
+              GoogleFonts.lilitaOne(
+                fontSize: 18,
+                fontWeight: FontWeight.w100,
               ),
             ),
           ),
-          cardTheme: const CardTheme(elevation: 3, shadowColor: shadowColor));
+        ),
+        cardTheme: const CardTheme(
+          elevation: 3,
+          shadowColor: shadowColor,
+          color: secondaryColor,
+        ),
+        checkboxTheme: const CheckboxThemeData(
+          fillColor: MaterialStatePropertyAll(secondaryColor),
+          checkColor: MaterialStatePropertyAll(brightColor),
+          overlayColor: MaterialStatePropertyAll(primaryColor)
+        ),
+      );
 }

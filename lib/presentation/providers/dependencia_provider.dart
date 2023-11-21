@@ -6,3 +6,5 @@ final listaDependenciaProvider = StateProvider<List<Dependencia>>((ref) => []);
 final nombreDependenciaProvider = StateProvider<String>((ref) => '');
 
 final descDependenciaProvider = StateProvider<String>((ref) => '');
+
+final dependenciaProvider = StateProvider<Dependencia?>((ref) => null);
